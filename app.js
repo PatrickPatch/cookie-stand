@@ -1,44 +1,3 @@
-// const cambridge = {
-//   minCookie: "",
-//   maxCookie: "",
-//   avCookie: "",
-// };
-
-// function getRandomInt() {
-//   return Math.floor(Math.random(30) * max);
-// }
-
-// console.log(getRandomInt(3));
-// // Expected output: 0, 1 or 2
-
-// console.log(getRandomInt(1));
-// // Expected output: 0
-
-// console.log(Math.random());
-// getRandomInt(50);
-// console.log(getRandomInt);
-
-// const southend = {};
-// const manchester = {};
-// getRandomInt(50);
-// console.log(getRandomInt);
-// math.random(30);
-// console.log(math.random(100));
-//create our first shop
-
-// const hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
-
-// const seattle = {
-// location: "seattle"
-// minCust: 23,
-// maxCust: 65,
-// avgCookiesPerCust: 6.3,
-// customersPerHour:[30, 42, 50, 37, 23, 33, 65, 49, 36, 29, 27, 44, 60, 54],
-// avgCookiespPer: [],
-// totalCookiesSold: 661.5
-
-// };
-
 const hours = [
   "6am",
   "7am",
@@ -55,12 +14,13 @@ const hours = [
   "6pm",
   "7pm",
 ];
+
 // give a random number between two numbers
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-// Math.floor(Math.random()
 
+// create our first shop
 const seattle = {
   location: "seattle",
   minCust: 23,
@@ -69,32 +29,52 @@ const seattle = {
   customersPerHour: [],
   cookiesPerHour: [],
   totalCookieSold: 0,
-  calcCustPerHour: function () {
+  calculateSales: function () {
+    // add a random number to the customersPerHour array
     for (let i = 0; i < hours.length; i++) {
-      //adds a random number to the customerPerHour array
       const randNum = randomNumber(this.minCust, this.maxCust);
       this.customersPerHour.push(randNum);
       this.cookiesPerHour.push(randNum * this.avgCookiesPerCust);
-      console.log(this);
-    }
-  },
-  calcCookiesPerHour: function () {
-    for (let i = 0; i < hours.length; i++) {
-      //to work out sales per hour
-      const custThisHour = this.avgCookiesPerCust * this.customersPerHour[i];
-      this.cookiesPerHour.push(custThisHour);
-      this.cookiesPerHour.push(randNum * this.avgCookiesPerCust);
+      console.log(randNum);
     }
   },
 };
 
-// const test = randomNumber(seattle.minCust, seattle.maxCust);
-// console.log(test);
-
-seattle.calcCustPerHour();
+seattle.calculateSales();
 console.log(seattle);
-// ()parenthesis
-// {}braces
-// []square bracket
 
-// customersPerHour:[30, 42, 50, 37, 23, 33, 65, 49, 36, 29, 27, 44, 60, 54],
+// we need to:
+// get (from the DOM) who the parent element is going to be. where am I attaching this new element
+const saleLocations = document.getElementById("seattle");
+
+// create a new element, or elements, that represent frankie
+const article = document.createElement("article");
+
+// inside that article, i need to put a h2 for the name, paragraph with their age, ul and some li's with their interests, image
+// name
+const h2 = document.createElement("h2"); // <h2></h2>
+h2.textContent = seattle.location; // <h2>Trevor</h2>
+article.appendChild(h2); // <article><h2>Trevor</h2></article>
+
+// age
+// const p = document.createElement("p");
+// p.textContent = `${trevor.name} is ${trevor.age} months old.`;
+// article.appendChild(p);
+
+// interests
+const ul = document.createElement("ul");
+for (let i = 0; i < seattle.cookiesPerHour.length; i++) {
+  const li = document.createElement("li");
+  li.textContent = seattle.cookiesPerHour[i];
+  ul.appendChild(li);
+}
+article.appendChild(ul);
+
+// image
+// const img = document.createElement("img");
+// img.src = trevor.image;
+// img.setAttribute("alt", trevor.name);
+// article.appendChild(img);
+
+// add the article to the page (by appending to the kittenProfiles div)
+saleLocations.appendChild(article);
