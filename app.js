@@ -22,7 +22,7 @@ function randomNumber(min, max) {
 
 // create our first shop
 const seattle = {
-  location: "seattle",
+  location: "Seattle",
   minCust: 23,
   maxCust: 65,
   avgCookiesPerCust: 6.3,
@@ -50,16 +50,9 @@ const saleLocations = document.getElementById("seattle");
 // create a new element, or elements, that represent frankie
 const article = document.createElement("article");
 
-// inside that article, i need to put a h2 for the name, paragraph with their age, ul and some li's with their interests, image
-// name
-const h2 = document.createElement("h2"); // <h2></h2>
-h2.textContent = seattle.location; // <h2>Trevor</h2>
-article.appendChild(h2); // <article><h2>Trevor</h2></article>
-
-// age
-// const p = document.createElement("p");
-// p.textContent = `${trevor.name} is ${trevor.age} months old.`;
-// article.appendChild(p);
+const h2 = document.createElement("h2");
+h2.textContent = seattle.location;
+article.appendChild(h2);
 
 const ul = document.createElement("ul");
 for (let i = 0; i < seattle.cookiesPerHour.length; i++) {
@@ -71,6 +64,76 @@ article.appendChild(ul);
 
 // add the article to the page (by appending to the kittenProfiles div)
 saleLocations.appendChild(article);
+
+const seattle = new cookieshop("Seattle", 23, 65, 6.3);
+const tokyo = new cookieshop("Tokyo", 3, 24, 1.2);
+const dubai = new cookieshop("Dubai", 11, 38, 3.7);
+const paris = new cookieshop("Paris", 20, 38, 2.3);
+const lima = new cookieshop("Lima", 2, 16, 4.6);
+
+// Kitten Factory
+function Kitten(name, age, interests, image, kids, dogs, cats, breed) {
+  this.name = name;
+  this.age = age;
+  this.interests = interests;
+  this.image = image;
+  this.goodWithKids = kids;
+  this.goodWithDogs = dogs;
+  this.goodWithCats = cats;
+  this.breed = breed;
+}
+
+// Adding a method to ALL Kittens called render (we chose the name render, it can be called anything)
+Kitten.prototype.render = function () {
+  // get (from the DOM) who the parent element is going to be. where am I attaching this new element
+  const kittenProfiles = document.getElementById("kittenProfiles");
+
+  // create a new element, or elements, that represent frankie
+  const article = document.createElement("article");
+
+  // inside that article, i need to put a h2 for the name, paragraph with their age, ul and some li's with their interests, image
+  // name
+  const h2 = document.createElement("h2"); // <h2></h2>
+  h2.textContent = this.name; // <h2>Trevor</h2>
+  article.appendChild(h2); // <article><h2>Trevor</h2></article>
+
+  // age
+  const p = document.createElement("p");
+  p.textContent = `${this.name} is ${this.age} months old.`;
+  article.appendChild(p);
+
+  // interests
+  const ul = document.createElement("ul");
+  for (let i = 0; i < this.interests.length; i++) {
+    const li = document.createElement("li");
+    li.textContent = this.interests[i];
+    ul.appendChild(li);
+  }
+  article.appendChild(ul);
+
+  // image
+  const img = document.createElement("img");
+  img.src = this.image;
+  img.setAttribute("alt", this.name);
+  article.appendChild(img);
+
+  // add the article to the page (by appending to the kittenProfiles div)
+  kittenProfiles.appendChild(article);
+};
+
+const trevor = new Kitten(
+  "Trevor",
+  2,
+  ["Philosophy", "Bacon", "Fish", "Minimilism"],
+  "./images/trevor.jpg",
+  true,
+  false,
+  false,
+  "ginger"
+);
+
+trevor.render();
+phylis.render();
 
 // const tokyo = {
 //   location: "tokyo",
