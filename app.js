@@ -53,49 +53,88 @@ CookieShop.prototype.bakecookies = function () {
   th.textContent = this.location;
   tr.appendChild(th);
 
-  // add this store's data to that row
   for (let i = 0; i < this.cookiesPerHour.length; i++) {
-    // create a new td and put the sales number in it
     const td = document.createElement("td");
     td.textContent = this.cookiesPerHour[i];
     tr.appendChild(td);
   }
-  //add total to end of row
   const totalTd = document.createElement("td");
 
   totalTd.textContent = this.totalCookieSold;
   tr.appendChild(totalTd);
-  //add row to table
   table.appendChild(tr);
 };
 
-const seattle = new CookieShop("Seattle", 23, 65, 6.3);
-const tokyo = new CookieShop("Tokyo", 3, 24, 1.2);
-const dubai = new CookieShop("Dubai", 11, 38, 3.7);
-const paris = new CookieShop("Paris", 20, 38, 2.3);
-const lima = new CookieShop("Lima", 2, 16, 4.6);
+const stores = [
+  new CookieShop("Seattle", 23, 65, 6.3),
+  new CookieShop("Tokyo", 3, 24, 1.2),
+  new CookieShop("Dubai", 11, 38, 3.7),
+  new CookieShop("Paris", 20, 38, 2.3),
+  new CookieShop("Lima", 2, 16, 4.6),
+];
 
 const headerRow = document.createElement("tr");
 const blankTd = document.createElement("td");
 headerRow.appendChild(blankTd);
 
-// add each time in a th
 for (let i = 0; i < hours.length; i++) {
   const th = document.createElement("th");
   th.textContent = hours[i];
   headerRow.appendChild(th);
 }
 
-// add a total heading
 const totalHeading = document.createElement("th");
 totalHeading.textContent = "Total";
 headerRow.appendChild(totalHeading);
 
-// add the row to the table
 table.appendChild(headerRow);
 
-seattle.bakecookies();
-tokyo.bakecookies();
-dubai.bakecookies();
-paris.bakecookies();
-lima.bakecookies();
+// FORM DATA STARTS HERE
+
+for (let i = 0; i < stores.length; i++) {
+  stores[i].bakecookies();
+}
+const form = document.querySelector("form");
+
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const location = event.target.location.value;
+  const minCust = event.target.minCust.value;
+  const maxCust = event.target.maxCust.value;
+  const avgCookiesPerCust = event.target.avgCookiesPerCust.value;
+  const newStore = new CookieShop(
+    location,
+    +minCust,
+    +maxCust,
+    +avgCookiesPerCust
+  );
+  newStore.bakecookies();
+  bakecookiesTotalRow();
+});
+
+function bakecookiesTotalRow() {
+  const oldTr = document.getElementById("totalrow");
+  oldTr?.remove();
+
+  const tr = document.createElement("tr");
+  tr.setAttribute("id", "totalrow");
+
+  const th = document.createElement("th");
+  th.textContent = "Hourly Total";
+  tr.appendChild(th);
+
+  for (let i = 0; i < hours.length; i++) {
+    let hourlyTotal = 0;
+
+    for (let k = 0; k < stores.length; k++) {
+      hourlyTotal = hourlyTotal + stores[k].cookiesPerHour[i];
+    }
+    const td = document.createElement("td");
+    td.textContent = hourlyTotal;
+    tr.appendChild(td);
+  }
+
+  table.appendChild(tr);
+}
+
+bakecookiesTotalRow();
