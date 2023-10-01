@@ -15,135 +15,126 @@ const hours = [
   "7pm",
 ];
 
+const table = document.getElementById("salesData");
+
 // give a random number between two numbers
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+//constructor for cookies
+function CookieShop(location, minCust, maxCust, avgCookiesPerCust) {
+  this.location = location;
+  this.minCust = minCust;
+  this.maxCust = maxCust;
+  this.avgCookiesPerCust = avgCookiesPerCust;
+  this.customersPerHour = [];
+  this.cookiesPerHour = [];
+  this.totalCookieSold = 0;
+}
 
-// create our first shop
-const seattle = {
-  location: "seattle",
-  minCust: 23,
-  maxCust: 65,
-  avgCookiesPerCust: 6.3,
-  customersPerHour: [],
-  cookiesPerHour: [],
-  totalCookieSold: 0,
-  calculateSales: function () {
-    // add a random number to the customersPerHour array
-    for (let i = 0; i < hours.length; i++) {
-      const randNum = randomNumber(this.minCust, this.maxCust);
-      this.customersPerHour.push(randNum);
-      this.cookiesPerHour.push(randNum * this.avgCookiesPerCust);
-      console.log(randNum);
-    }
-  },
+CookieShop.prototype.calculateSales = function () {
+  for (let i = 0; i < hours.length; i++) {
+    const hourCustomers = randomNumber(this.minCust, this.maxCust);
+    this.customersPerHour.push(hourCustomers);
+
+    const hourCookiesSold = Math.floor(hourCustomers * this.avgCookiesPerCust);
+    this.cookiesPerHour.push(hourCookiesSold);
+
+    this.totalCookieSold = this.totalCookieSold + hourCookiesSold;
+  }
 };
 
-seattle.calculateSales();
-console.log(seattle);
+CookieShop.prototype.bakecookies = function () {
+  this.calculateSales();
 
-// we need to:
-// get (from the DOM) who the parent element is going to be. where am I attaching this new element
-const saleLocations = document.getElementById("seattle");
+  const tr = document.createElement("tr");
+  const th = document.createElement("th");
 
-// create a new element, or elements, that represent frankie
-const article = document.createElement("article");
+  th.textContent = this.location;
+  tr.appendChild(th);
 
-// inside that article, i need to put a h2 for the name, paragraph with their age, ul and some li's with their interests, image
-// name
-const h2 = document.createElement("h2"); // <h2></h2>
-h2.textContent = seattle.location; // <h2>Trevor</h2>
-article.appendChild(h2); // <article><h2>Trevor</h2></article>
+  for (let i = 0; i < this.cookiesPerHour.length; i++) {
+    const td = document.createElement("td");
+    td.textContent = this.cookiesPerHour[i];
+    tr.appendChild(td);
+  }
+  const totalTd = document.createElement("td");
 
-// age
-// const p = document.createElement("p");
-// p.textContent = `${trevor.name} is ${trevor.age} months old.`;
-// article.appendChild(p);
+  totalTd.textContent = this.totalCookieSold;
+  tr.appendChild(totalTd);
+  table.appendChild(tr);
+};
 
-const ul = document.createElement("ul");
-for (let i = 0; i < seattle.cookiesPerHour.length; i++) {
-  const li = document.createElement("li");
-  li.textContent = seattle.cookiesPerHour[i];
-  ul.appendChild(li);
+const stores = [
+  new CookieShop("Seattle", 23, 65, 6.3),
+  new CookieShop("Tokyo", 3, 24, 1.2),
+  new CookieShop("Dubai", 11, 38, 3.7),
+  new CookieShop("Paris", 20, 38, 2.3),
+  new CookieShop("Lima", 2, 16, 4.6),
+];
+
+const headerRow = document.createElement("tr");
+const blankTd = document.createElement("td");
+headerRow.appendChild(blankTd);
+
+for (let i = 0; i < hours.length; i++) {
+  const th = document.createElement("th");
+  th.textContent = hours[i];
+  headerRow.appendChild(th);
 }
-article.appendChild(ul);
 
-// add the article to the page (by appending to the kittenProfiles div)
-saleLocations.appendChild(article);
+const totalHeading = document.createElement("th");
+totalHeading.textContent = "Total";
+headerRow.appendChild(totalHeading);
 
-// const tokyo = {
-//   location: "tokyo",
-//   minCust: 3,
-//   maxCust: 24,
-//   avgCookiesPerCust: 1.2,
-//   customersPerHour: [],
-//   cookiesPerHour: [],
-//   totalCookieSold: 0,
-//   calculateSales: function () {
-//     // add a random number to the customersPerHour array
-//     for (let i = 0; i < hours.length; i++) {
-//       const randNum = randomNumber(this.minCust, this.maxCust);
-//       this.customersPerHour.push(randNum);
-//       this.cookiesPerHour.push(randNum * this.avgCookiesPerCust);
-//       console.log(randNum);
-//     }
-//   },
-// };
+table.appendChild(headerRow);
 
-// const dubai = {
-//   location: "dubai",
-//   minCust: 11,
-//   maxCust: 38,
-//   avgCookiesPerCust: 3.7,
-//   customersPerHour: [],
-//   cookiesPerHour: [],
-//   totalCookieSold: 0,
-//   calculateSales: function () {
-//     // add a random number to the customersPerHour array
-//     for (let i = 0; i < hours.length; i++) {
-//       const randNum = randomNumber(this.minCust, this.maxCust);
-//       this.customersPerHour.push(randNum);
-//       this.cookiesPerHour.push(randNum * this.avgCookiesPerCust);
-//       console.log(randNum);
-//     }
-//   },
-// };
+// FORM DATA STARTS HERE
 
-// const paris = {
-//   location: "paris",
-//   minCust: 20,
-//   maxCust: 38,
-//   avgCookiesPerCust: 2.3,
-//   customersPerHour: [],
-//   cookiesPerHour: [],
-//   totalCookieSold: 0,
-//   calculateSales: function () {
-//     // add a random number to the customersPerHour array
-//     for (let i = 0; i < hours.length; i++) {
-//       const randNum = randomNumber(this.minCust, this.maxCust);
-//       this.customersPerHour.push(randNum);
-//       this.cookiesPerHour.push(randNum * this.avgCookiesPerCust);
-//       console.log(randNum);
-//     }
-//   },
-// };
+for (let i = 0; i < stores.length; i++) {
+  stores[i].bakecookies();
+}
+const form = document.querySelector("form");
 
-// const lima = {
-//   location: "lima",
-//   minCust: 2,
-//   maxCust: 16,
-//   avgCookiesPerCust: 4.6,
-//   customersPerHour: [],
-//   cookiesPerHour: [],
-//   totalCookieSold: 0,
-//   calculateSales: function () {
-//     // add a random number to the customersPerHour array
-//     for (let i = 0; i < hours.length; i++) {
-//       const randNum = randomNumber(this.minCust, this.maxCust);
-//       this.customersPerHour.push(randNum);
-//       this.cookiesPerHour.push(randNum * this.avgCookiesPerCust);
-//       console.log(randNum);
-//     }
-//   },
-// };
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const location = event.target.location.value;
+  const minCust = event.target.minCust.value;
+  const maxCust = event.target.maxCust.value;
+  const avgCookiesPerCust = event.target.avgCookiesPerCust.value;
+  const newStore = new CookieShop(
+    location,
+    +minCust,
+    +maxCust,
+    +avgCookiesPerCust
+  );
+  newStore.bakecookies();
+  bakecookiesTotalRow();
+});
+
+function bakecookiesTotalRow() {
+  const oldTr = document.getElementById("totalrow");
+  oldTr?.remove();
+
+  const tr = document.createElement("tr");
+  tr.setAttribute("id", "totalrow");
+
+  const th = document.createElement("th");
+  th.textContent = "Hourly Total";
+  tr.appendChild(th);
+
+  for (let i = 0; i < hours.length; i++) {
+    let hourlyTotal = 0;
+
+    for (let k = 0; k < stores.length; k++) {
+      hourlyTotal = hourlyTotal + stores[k].cookiesPerHour[i];
+    }
+    const td = document.createElement("td");
+    td.textContent = hourlyTotal;
+    tr.appendChild(td);
+  }
+
+  table.appendChild(tr);
+}
+
+bakecookiesTotalRow();
